@@ -48,7 +48,6 @@ public class TreeBehaviour : MonoBehaviour
 
     private void OnMouseDown()
     {
-        print("tree clicked");
         if (currentState == states.READY && gameManager.placeCropMode == false)
         {
             fruit.SetActive(false);

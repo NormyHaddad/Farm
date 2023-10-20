@@ -741,7 +741,7 @@ MonoBehaviour:
   ghost: {fileID: 3732448994447519242, guid: 3bd30cbd924770e488ddc92caf50d1a1, type: 3}
   value: 1
   yield: 5
-  regrowTime: 3
+  regrowTime: 10
 --- !u!114 &-1573273640639955690
 MonoBehaviour:
   m_ObjectHideFlags: 0

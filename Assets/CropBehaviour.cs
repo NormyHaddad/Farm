@@ -24,6 +24,8 @@ public class CropBehaviour : MonoBehaviour
     public GameObject cropToPlant;
     public GameObject soil;
 
+    public ParticleSystem waterSpray;
+
 
     enum states
     {
@@ -52,7 +54,7 @@ public class CropBehaviour : MonoBehaviour
             if (timer * 2 >= growTime)//if its partly grown
             {
                 Destroy(cropToPlant);
-                cropToPlant = Instantiate(youngPlant, transform.position, Quaternion.identity);
+                cropToPlant = Instantiate(youngPlant, transform.position + cropLocation, Quaternion.identity);
                 plotState = states.GROWING;
             }
         }
@@ -66,7 +68,7 @@ public class CropBehaviour : MonoBehaviour
             if (timer >= growTime)//if its fully grown
             {
                 Destroy(cropToPlant);
-                cropToPlant = Instantiate(maturePlant, transform.position, Quaternion.identity);
+                cropToPlant = Instantiate(maturePlant, transform.position + cropLocation, Quaternion.identity);
                 cropToPlant.transform.SetParent(gameObject.transform);
                 plotState = states.HARVESTABLE;
             }
@@ -75,16 +77,18 @@ public class CropBehaviour : MonoBehaviour
 
     private void OnMouseDown()
     {
+        Debug.Log(gameManager.GetComponent<GameManager>().placeCropMode);
+
         if (cropToPlant != null)
             print(cropToPlant.name);
 
-        print(plotState);
         if (plotState == states.READY && gameManager.GetComponent<GameManager>().currentCrop != null)
         {
             plantedCrop = gameManager.GetComponent<GameManager>().currentCrop;
             gameManager.GetComponent<GameManager>().UpdateCoins(plantedCrop.GetComponent<CropClass>().cost * -1);
 
             plantSeeds = plantedCrop.stage0;
+            youngPlant = plantedCrop.stage1;
             youngPlant = plantedCrop.stage1;
             maturePlant = plantedCrop.stage2;
             growTime = plantedCrop.timeToGrow;
@@ -93,15 +97,19 @@ public class CropBehaviour : MonoBehaviour
             plotState = states.PLANTED;
         }
 
-        if (plotState == states.READY && gameManager.GetComponent<GameManager>().currentCrop == null)
+        // If the plot is either ready, has seeds planted, or has plants growing, and if it is not already watered
+        if ((plotState == states.READY || plotState == states.PLANTED || plotState == states.GROWING)
+            && gameManager.GetComponent<GameManager>().placeCropMode == false && !isWatered)
         {
             isWatered = true;
             soil.GetComponent<MeshRenderer>().material = wetMaterial;
+            waterSpray.Play();
         }
 
         if (plotState == states.MESSY)
         {
             plotState = states.READY;
+            isWatered = false;
             soil.GetComponent<MeshRenderer>().material = readyMaterial;
         }
 

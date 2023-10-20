@@ -10,12 +10,14 @@ public class GameManager : MonoBehaviour
     public Camera cam;
     public int Coins;
     public int Cost;
+    public string season;
 
     // Bools
     public bool placeObjMode;
     public bool placeCropMode;
     public bool placeTreeMode;
-    public bool objInstantiated;
+    bool objInstantiated;
+    bool tooltipVisible;
 
     // Screens
     public GameObject cropSelectorScreen;
@@ -24,10 +26,14 @@ public class GameManager : MonoBehaviour
     public GameObject currentScreen;
     List<GameObject> previousScreens;
 
-    public GameObject errorMsg;
-    
     public GameObject plotObj;
+
+    // UI
     public GameObject coinDisplay;
+    public GameObject seasonDisplay;
+    public GameObject tooltip;
+    public GameObject errorMsg;
+
     public CropClass currentCrop;
     public GameObject currentObj;
     TreeBehaviour currentTree;
@@ -48,11 +54,20 @@ public class GameManager : MonoBehaviour
         currentCrop = null;
         placeObjMode = false;
         objInstantiated = false;
+        tooltipVisible = false;
+
+        //seasonDisplay.GetComponent<TextMeshProUGUI>().text = season;
     }
 
     // Update is called once per frame
     void Update()
     {
+        // If the tooltip is visible, make it follow the mouse
+        if (tooltipVisible)
+        {
+            tooltip.transform.position = Input.mousePosition;
+        }
+
         if (Input.GetKeyDown(KeyCode.X) && !gameOverlayScreen.activeSelf)
         {
             CloseScreen();
@@ -101,24 +116,6 @@ public class GameManager : MonoBehaviour
         placeCropMode = true;
         ChangeToScreen(placeObjScreen);
     }
-
-    //public void PlaceTreeMode()
-    //{
-    //    currentCrop = null;
-    //    currentTree = tree;
-    //    CloseScreen();
-    //    placeTreeMode = true;
-    //}
-    
-    //public void PlaceObjMode()
-    //{
-    //    currentCrop = null;
-    //    currentObj = plotObj;//to fix
-    //    if (currentCrop != null)
-    //        currentCrop.gameObject.GetComponent<MeshRenderer>().material = ghostGreen;
-    //    CloseScreen();
-    //    placeObjMode = true;
-    //}    
     
     public void PlaceObjModeNew(GameObject objToPlace)
     {
@@ -132,6 +129,38 @@ public class GameManager : MonoBehaviour
         }
         else
             StartCoroutine(ShowErrorMsg("Not enough coins", 3));
+    }
+
+    public void CheckSeason(CropClass crop)
+    {
+        bool validSeason = false;
+        List<string> seasonsList = crop.GetComponent<CropClass>().seasons;
+        if (seasonsList.Contains("all"))
+        {
+            ReturnCrop(crop.GetComponent<CropClass>());
+        }
+        else
+        {
+            foreach (string str in seasonsList)
+            {
+                if (str == season)
+                {
+                    validSeason = true;
+                    Debug.Log("correct season");
+                }
+            }
+        }
+
+        if (validSeason)
+        {
+            ReturnCrop(crop);
+            Debug.Log(4);
+        }
+        else
+        {
+            Debug.Log("wrong season");
+            StartCoroutine(ShowErrorMsg("Cannot be planted in this season"));
+        }
     }
 
     public void UpdateCoins(int value, int yield = 1)
@@ -164,10 +193,24 @@ public class GameManager : MonoBehaviour
     }
     public IEnumerator ShowErrorMsg(string textToDisplay, float decayTime = 5f)
     {
+        Debug.Log("error");
         errorMsg.SetActive(true);
         errorMsg.GetComponent<TextMeshProUGUI>().text = textToDisplay;
         yield return new WaitForSeconds(decayTime);
         errorMsg.SetActive(false);
         StopCoroutine(ShowErrorMsg(textToDisplay, decayTime));
+    }
+
+    public void ShowTooltip(string message)
+    {
+        tooltipVisible = true;
+        tooltip.SetActive(true);
+        tooltip.GetComponentInChildren<TextMeshProUGUI>().text = message;
+    }
+
+    public void HideTooltip()
+    {
+        tooltipVisible = false;
+        tooltip.SetActive(false);
     }
 }

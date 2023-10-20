@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class CropClass : MonoBehaviour
 {
+    public List<string> seasons;
     public string name;
     public int cost;
     public int value;

@@ -47,6 +47,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c1da2707a42727446a7af98475e0a126, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  seasons:
+  - all
   name: wheat
   cost: 0
   value: 1
@@ -106,6 +108,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Wheat Seeds
+      objectReference: {fileID: 0}
+    - target: {fileID: 7870268384682551623, guid: 180453acd932b8d4297f9551750247c0,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8293240375067084488, guid: 180453acd932b8d4297f9551750247c0,
         type: 3}
@@ -332,6 +339,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Wheat young
+      objectReference: {fileID: 0}
+    - target: {fileID: 3001956851368744821, guid: ae09f8774b6a8fd4298565929e2fcb6c,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3762951170022564473, guid: ae09f8774b6a8fd4298565929e2fcb6c,
         type: 3}
