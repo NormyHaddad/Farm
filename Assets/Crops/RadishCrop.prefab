@@ -48,8 +48,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   seasons:
-  - winter
-  - spring
+  - Winter
+  - Spring
   name: Radish
   cost: 5
   value: 8

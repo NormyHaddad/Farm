@@ -56,7 +56,10 @@ public class GameManager : MonoBehaviour
         objInstantiated = false;
         tooltipVisible = false;
 
-        //seasonDisplay.GetComponent<TextMeshProUGUI>().text = season;
+        if (seasonDisplay != null)
+        {
+            seasonDisplay.GetComponent<Text>().text = season;
+        }
     }
 
     // Update is called once per frame

@@ -49,7 +49,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   seasons:
   - all
-  name: wheat
+  name: Wheat
   cost: 0
   value: 1
   timeToGrow: 10
